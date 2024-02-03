@@ -15,3 +15,4 @@ sudo apt install qemu-system-x86
 ```
 
 Then run this: `make` and then `make run`, if you have some fancy software it should open up a Qemu window with it in, else, you probably don't and you'll have to stick it in a VM yourself.
+Oh yeah and if you get some random 127 error just do `sudo apt install git` and then try again
