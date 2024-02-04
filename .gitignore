@@ -19,3 +19,4 @@ src/.vs/ProjectSettings.json
 src/.vs/VSWorkspaceState.json
 src/.vs/src/FileContentIndex/7290a4d7-3fd8-4828-b74a-fb7aa5fc4b5f.vsidx
 src/.vs/src/FileContentIndex/8041936c-58d2-4d23-a2ed-120027d6b69f.vsidx
+*.vsidx
