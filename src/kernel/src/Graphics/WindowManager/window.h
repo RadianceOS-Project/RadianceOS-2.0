@@ -1,4 +1,5 @@
+#include <processes/process.h> 
 class WindowManager {
 public:
-    class Window;
+    class Window : process;
 };
