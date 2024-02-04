@@ -1,7 +1,7 @@
 #include <limine/limine.h>
 #include <VideoUtils/videoutils.h>
 
-limine_framebuffer* framebuffer;
+/*limine_framebuffer* framebuffer;
 
 void Setframebuffer(limine_framebuffer* framebuff)
 {
@@ -60,4 +60,4 @@ void drawLine(int x1, int y1, int x2, int y2,unsigned int color)
             p = p + 2 * dy - 2 * dx;
         }
     }
-}
+}*/

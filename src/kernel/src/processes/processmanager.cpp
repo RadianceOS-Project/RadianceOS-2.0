@@ -1,10 +1,10 @@
-#include "process.h"
+/*#include "process.h"
 #include "processmanager.h"
 #include <list>
 #include <iostream>
 
 using namespace std;
-using std::list;
+using std::list;*/
 
 /*list<process> processes = {};
 

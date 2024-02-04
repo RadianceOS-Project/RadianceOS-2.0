@@ -1,13 +1,13 @@
-#include "processes/process.h"
+/*#include "processes/process.h"
 #include "processes/processmanager.h"
 #include "window.h"
 #include <list>
 #include <iostream>
 
 using namespace std;
-using std::list;
+using std::list;*/
 
-list<WindowManager::Window> windows = {};
+/*list<WindowManager::Window> windows = {};
 
 WindowManager::Window CreateBaseWindow(char* WindowTitle, int x, int y, int width, int height) {
     WindowManager::Window window;
@@ -24,4 +24,4 @@ WindowManager::Window CreateBaseWindowWithProcess(char* WindowTitle, int x, int 
     window.AssignProcess(PID);
 
     windows.push_back(window);
-}
+}*/
