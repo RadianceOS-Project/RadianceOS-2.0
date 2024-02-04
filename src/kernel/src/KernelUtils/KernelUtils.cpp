@@ -1,4 +1,4 @@
-#include <KernelUtils/KernelUtils.h>
+#include <kernelUtils/KernelUtils.h>
 #include <limine/limine.h>
 
 void* memcpy(void* dest, const void* src, size_t n) {

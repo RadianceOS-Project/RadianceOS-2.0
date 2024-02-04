@@ -1,8 +1,12 @@
 #include "window.h"
-class WindowManager::Window {
+
+// There is literally no point in trying to fix this right now since
+// we won't be using it straight away but we need to fix it later.
+
+/*class WindowManager_H::WindowManager::Window {
 public:
     int associated_process = -1;
-    char* WindowTitle = "";
+    char* WindowTitle;
 
     int x = 0;
     int y = 0;
@@ -80,4 +84,4 @@ public:
 
         MoveWindow(x, y); // This usualy triggers a re-render and will move the window if it goes out view
     }
-};
+};*/

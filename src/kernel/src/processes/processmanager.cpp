@@ -6,17 +6,17 @@
 using namespace std;
 using std::list;
 
-list<process> processes = {};
+/*list<process> processes = {};
 
-void AddProcess(process p)
+void ProcessManager::AddProcess(process p)
 {
 	p.processID = processes.size();
 	processes.push_back(p);
 
 }
-void KillProcess(int processid)
+void ProcessManager::KillProcess(int processid)
 {
 	auto it = processes.begin();
 	advance(it, processid);
 	processes.erase(it);
-}
+}*/

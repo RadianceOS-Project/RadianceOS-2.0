@@ -1,6 +1,6 @@
-#include "process.h"
-#include "processmanager.h"
-#include "WindowManager/window.h"
+#include "processes/process.h"
+#include "processes/processmanager.h"
+#include "window.h"
 #include <list>
 #include <iostream>
 
