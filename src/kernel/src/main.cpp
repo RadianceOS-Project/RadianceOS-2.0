@@ -1,5 +1,6 @@
 #include <limine/limine.h>
 #include <KernelUtils/KernelUtils.h>
+#include <VideoUtils/videoutils.h>
 
 // Set the base revision to 1, this is recommended as this is the latest
 // base revision described by the Limine boot protocol specification.
@@ -35,15 +36,10 @@ void _start(void) {
      || framebuffer_request.response->framebuffer_count < 1) {
         hcf();
     }
-
+    
     // Fetch the first framebuffer.
     framebuffer = framebuffer_request.response->framebuffers[0];
-
-    // Note: we assume the framebuffer model is RGB with 32-bit pixels.
-    for (size_t i = 0; i < 100; i++) {
-        volatile uint32_t *fb_ptr = framebuffer->address;
-        fb_ptr[i * (framebuffer->pitch / 4) + i] = 0xffffff;
-    }
+    Setframebuffer(framebuffer);
 
     while (Running)
     {
@@ -56,6 +52,7 @@ void _start(void) {
 void _loop(void)
 {
 
-    
+    ClearScreen(0xffffff);
+    DrawFilledRectangle(10,10,100,100,0x141414);
 
 }
