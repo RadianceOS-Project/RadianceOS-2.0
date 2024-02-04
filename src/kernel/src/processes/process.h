@@ -1,7 +1,5 @@
 #include <processes/processmanager.h>
-class process
-{
-	
-	public int processID;
-
+class process {
+public:
+	int processID;
 };
