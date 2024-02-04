@@ -25,6 +25,10 @@ $(eval $(call DEFAULT_VAR,CC,$(DEFAULT_CC)))
 override DEFAULT_LD := ld
 $(eval $(call DEFAULT_VAR,LD,$(DEFAULT_LD)))
 
+# Same thing for "cxx" (the cpp compiler).
+override CXX := g++
+$(eval $(call DEFAULT_VAR,LD,$(DEFAULT_LD)))
+
 # User controllable C flags.
 override DEFAULT_CFLAGS := -g -O2 -pipe
 $(eval $(call DEFAULT_VAR,CFLAGS,$(DEFAULT_CFLAGS)))
@@ -84,11 +88,12 @@ override NASMFLAGS += \
 
 # Use "find" to glob all *.c, *.S, and *.asm files in the tree and obtain the
 # object and header dependency file names.
-override CFILES := $(shell cd src && find -L * -type f -name '*.cpp')
+override CFILES := $(shell cd src && find -L * -type f -name '*.c')
+override CPPFILES := $(shell cd src && find -L * -type f -name '*.cpp')
 override ASFILES := $(shell cd src && find -L * -type f -name '*.S')
 override NASMFILES := $(shell cd src && find -L * -type f -name '*.asm')
-override OBJ := $(addprefix obj/,$(CFILES:.c=.c.o) $(ASFILES:.S=.S.o) $(NASMFILES:.asm=.asm.o))
-override HEADER_DEPS := $(addprefix obj/,$(CFILES:.c=.c.d) $(ASFILES:.S=.S.d))
+override OBJ := $(addprefix obj/,$(CFILES:.c=.c.o) $(CPPFILES:.cpp=.cpp.o) $(ASFILES:.S=.S.o) $(NASMFILES:.asm=.asm.o))
+override HEADER_DEPS := $(addprefix obj/,$(CFILES:.c=.c.d) $(CPPFILES:.cpp=.cpp.d) $(ASFILES:.S=.S.d))
 
 # Default target.
 .PHONY: all
@@ -109,6 +114,11 @@ bin/$(KERNEL): GNUmakefile linker.ld $(OBJ)
 obj/%.c.o: src/%.c GNUmakefile src/limine.h
 	mkdir -p "$$(dirname $@)"
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+
+# Compilation rules for *.CPP files
+obj/%.cpp.o: src/%.cpp GNUmakefile src/limine.h
+	mkdir -p "$$(dirname $@)"
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # Compilation rules for *.S files.
 obj/%.S.o: src/%.S GNUmakefile
