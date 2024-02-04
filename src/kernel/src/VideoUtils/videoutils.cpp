@@ -35,7 +35,8 @@ void DrawPoint(int x, int y, unsigned int color)
     fb_ptr[x + y * framebuffer.width] = color;
 
 }
-void drawLine(int x1, int y1, int x2, int y2,unsigned int color) {
+void drawLine(int x1, int y1, int x2, int y2,unsigned int color) 
+{
     int dx, dy, p, x, y;
 
     dx = x2 - x1;
