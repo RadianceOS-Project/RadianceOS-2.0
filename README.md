@@ -3,4 +3,4 @@ RadianceOS 2.0 is developed and owned by [SzymekkYT](https://github.com/SzymekkY
 
 ## Links
 - [Official Discord](https://discord.gg/aM6CxZm7Yc)
-- [Documentation](#/docs/index.md) (Will come later)
+- [Documentation](https://github.com/SzymekkYT/RadianceOS-2.0/tree/main/src/kernel/src)
