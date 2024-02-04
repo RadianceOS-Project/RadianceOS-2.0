@@ -17,10 +17,22 @@ public:
 
     int id = 0;
 
+    int Window::GetAssociatedProcess() { return this->associated_process; }
+    char* Window::GetWindowTitle() { return this->WindowTitle; }
+    int Window::GetX() { return this->x; }
+    int Window::GetY() { return this->y; }
+    int Window::GetWidth() { return this->width; }
+    int Window::GetHeight() { return this->height; }
+    int Window::GetMinWidth() { return this->minwidth; }
+    int Window::GetMinHeight() { return this->minheight; }
+    int Window::GetMaxWidth() { return this->maxwidth; }
+    int Window::GetMaxHeight() { return this->maxheight; }
+    int Window::GetWindowId() { return this->id; }
+
     void Window::AssignProcess(int process) {
         // Don't reassign
         if(associated_process == -1)  associated_process = process;
-    };
+    }
 
     void Window::DeAssignProcess() {
         // Simply remove the assigned process (So it lets you reassign)
@@ -52,6 +64,8 @@ public:
 
         this->x = x;
         this->y = y;
+
+        RedrawWindowFrame();
     }
 
     void Window::ResizeWindow(int width, int height) {
