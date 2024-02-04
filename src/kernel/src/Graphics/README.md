@@ -1,0 +1,1 @@
+# RadianceOS 2.0 folder structure - Graphics
