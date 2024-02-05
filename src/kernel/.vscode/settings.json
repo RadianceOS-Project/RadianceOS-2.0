@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "*.ejs": "html",
-        "list": "cpp"
+        "list": "cpp",
+        "videoutils.h": "c"
     }
 }

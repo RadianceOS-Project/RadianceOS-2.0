@@ -1,5 +1,6 @@
 #include <limine/limine.h>
-void Setframebuffer(limine_framebuffer* framebuff);
+//void Setframebuffer(limine_framebuffer* framebuff);
+void InitialiseFrameBuffer();
 void ClearScreen(unsigned int color);
 void DrawFilledRectangle(int x, int y, int width, int height, unsigned int color);
 void DrawPoint(int x, int y, unsigned int color);

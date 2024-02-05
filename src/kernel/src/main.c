@@ -41,6 +41,9 @@ void _start(void) {
     }
     
     // Fetch the first framebuffer.
+    struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
+    //Setframebuffer(framebuffer);
+    InitialiseFrameBuffer();
     framebuffer = framebuffer_request.response->framebuffers[0];
     //Setframebuffer(framebuffer); // Temp
 
