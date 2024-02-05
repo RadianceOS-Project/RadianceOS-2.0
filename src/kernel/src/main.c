@@ -58,7 +58,7 @@ void _start(void) {
 void _loop(void)
 {
 
-    //ClearScreen(0xffffff);
-    //DrawFilledRectangle(10,10,100,100,0x141414);
+    ClearScreen(0xffffff);
+    DrawFilledRectangle(10,10,100,100,0x141414);
 
 }
