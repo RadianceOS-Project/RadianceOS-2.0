@@ -28,7 +28,7 @@ void _loop(void); // Forward declaration
 void _start(void) {
     // Ensure the bootloader actually understands our base revision (see spec).
     if (LIMINE_BASE_REVISION_SUPPORTED == false) {
-        //hcf(); // Temp
+        hcf();
     }
 
     //prints the test hello message
@@ -37,7 +37,7 @@ void _start(void) {
     // Ensure we got a framebuffer.
     if (framebuffer_request.response == NULL
      || framebuffer_request.response->framebuffer_count < 1) {
-        //hcf(); // Temp
+        hcf();
     }
     
     // Fetch the first framebuffer.
@@ -49,15 +49,10 @@ void _start(void) {
 
     while (Running)
     {
-        //_loop();
+        _loop();
     }
     // We're done, just hang...
-    //hcf(); // Temp
-
-    asm("cli");
-    for (;;) {
-        asm("hlt");
-    }
+    hcf();
 }
 
 void _loop(void)
