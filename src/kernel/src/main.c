@@ -1,6 +1,6 @@
 #include <limine/limine.h>
 #include <KernelUtils/KernelUtils.h>
-//#include <VideoUtils/videoutils.h>
+#include <VideoUtils/videoutils.h>
 
 // Set the base revision to 1, this is recommended as this is the latest
 // base revision described by the Limine boot protocol specification.
@@ -17,7 +17,7 @@ LIMINE_BASE_REVISION(1)
     .revision = 0
 };*/
 
-//bool Running = true;
+bool Running = true;
 //struct limine_framebuffer* framebuffer;
 // The following will be our kernel's entry point.
 // If renaming _start() to something else, make sure to change the
@@ -51,14 +51,17 @@ void _start(void) {
     // Fetch the first framebuffer.
     //struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
     //Setframebuffer(framebuffer);
-    //InitialiseFrameBuffer();
+    InitialiseFrameBuffer();
     //framebuffer = framebuffer_request.response->framebuffers[0];
     //Setframebuffer(framebuffer); // Temp
 
-    /*while (Running)
+    ClearScreen(0xffffff);
+
+    while (Running)
     {
         _loop();
-    }*/
+    }
+
     // We're done, just hang...
     _hcf();
 }
