@@ -68,11 +68,20 @@ void _start(void) {
     _hcf();
 }
 
+unsigned int color = 0x0;
+unsigned int frame = 0;
+
 void _loop(void)
 {
+    frame++;
+
+    if(frame % 4 == 0) {
+        color += 0x001;
+    }
+    
     //ClearScreen(0xffffff);
     //ClearScreen(0x171717); // Clear it with a matte black screen (Because it looks nice lol)
     //DrawFilledRectangle(10,10,100,100,0xffffff); // 0x141414
 
-    DrawFilledRectangle(25, 25, GetWidth() - 50, GetHeight() - 50, 0xffffff);
+    DrawFilledRectangle(25, 25, GetWidth() - 50, GetHeight() - 50, color); // 0xffffff
 }
