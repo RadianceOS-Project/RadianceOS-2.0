@@ -1,6 +1,8 @@
 #include <limine/limine.h>
 #include <KernelUtils/KernelUtils.h>
 #include <VideoUtils/videoutils.h>
+#include <VideoUtils/colors.h>
+#include <VideoUtils/videospecs.h>
 
 // Set the base revision to 1, this is recommended as this is the latest
 // base revision described by the Limine boot protocol specification.
@@ -55,7 +57,7 @@ void _start(void) {
     //framebuffer = framebuffer_request.response->framebuffers[0];
     //Setframebuffer(framebuffer); // Temp
 
-    ClearScreen(0xffffff);
+    ClearScreen(0x0);
 
     while (Running)
     {
@@ -68,9 +70,9 @@ void _start(void) {
 
 void _loop(void)
 {
-
     //ClearScreen(0xffffff);
-    ClearScreen(0x171717); // Clear it with a matte black screen (Because it looks nice lol)
-    DrawFilledRectangle(10,10,100,100,0xffffff); // 0x141414
+    //ClearScreen(0x171717); // Clear it with a matte black screen (Because it looks nice lol)
+    //DrawFilledRectangle(10,10,100,100,0xffffff); // 0x141414
 
+    DrawFilledRectangle(25, 25, GetWidth() - 50, GetHeight() - 50, 0xffffff);
 }

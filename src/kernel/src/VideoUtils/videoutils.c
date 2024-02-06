@@ -1,5 +1,6 @@
 #include <limine/limine.h>
 #include <VideoUtils/videoutils.h>
+#include <VideoUtils/videospecs.h>
 #include <KernelUtils/KernelUtils.h>
 
 struct limine_framebuffer *framebuffer;
@@ -20,7 +21,14 @@ void InitialiseFrameBuffer() {
     }
 
     framebuffer = framebuffer_request.response->framebuffers[0]; // Somehow we could have multiple?
+
+    // Also initialise some screen specifications
+    //ScreenbufferWidth = framebuffer->width;
+    //ScreenbufferHeight = framebuffer->height;
 }
+
+int GetWidth(void) { return framebuffer->width; }
+int GetHeight(void) { return framebuffer->height; }
 
 void ClearScreen(unsigned int color)
 {
@@ -66,7 +74,7 @@ void DrawFilledRectangle(int x, int y, int width, int height, unsigned int color
             // Now work from left to right
             uint64_t posX = _x + x;
 
-            fb_ptr[_x + _y * framebuffer->width] = color; // Draw the position on the screen
+            fb_ptr[posX + posY * framebuffer->width] = color; // Draw the position on the screen
         }
    }
 }
