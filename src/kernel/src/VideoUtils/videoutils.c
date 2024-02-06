@@ -25,15 +25,26 @@ void InitialiseFrameBuffer() {
 void ClearScreen(unsigned int color)
 {
     // Note: we assume the framebuffer model is RGB with 32-bit pixels.
-    for (uint64_t i = 0; i < framebuffer->width; i++) {
+    /*for (uint64_t i = 0; i < framebuffer->width; i++) {
         volatile uint32_t* fb_ptr = framebuffer->address;
         fb_ptr[i * (framebuffer->pitch / 4) + i] = color;
+    }*/
+
+    for (uint64_t y = 0; y < framebuffer->height; y++) {
+        // Working from top to bottom
+        
+        for(uint64_t x = 0; x < framebuffer->width; x++) {
+            // Working from left to right
+
+            DrawPoint(x, y, color);
+        }
     }
 }
 
 void DrawFilledRectangle(int x, int y, int width, int height, unsigned int color)
 {
-
+    // This is not a rectangle lmao
+    /*
     volatile uint32_t* fb_ptr = framebuffer->address;
     for (uint64_t i = x; i < framebuffer->width + x; i++)
     {
@@ -42,7 +53,22 @@ void DrawFilledRectangle(int x, int y, int width, int height, unsigned int color
             fb_ptr[i+j*framebuffer->width] = color;
         }
     }
+    */
 
+   volatile uint32_t* fb_ptr = framebuffer->address;
+
+   // Work out every pixel we need
+   for (uint64_t _y = 0; _y < height; _y++) {
+        // Work from top to bottom, makes it easier
+        uint64_t posY = _y + y;
+
+        for (uint64_t _x = 0; _x < width; _x++) {
+            // Now work from left to right
+            uint64_t posX = _x + x;
+
+            fb_ptr[_x + _y * framebuffer->width] = color; // Draw the position on the screen
+        }
+   }
 }
 
 void DrawPoint(int x, int y, unsigned int color)

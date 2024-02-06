@@ -69,7 +69,8 @@ void _start(void) {
 void _loop(void)
 {
 
-    ClearScreen(0xffffff);
-    DrawFilledRectangle(10,10,100,100,0x141414);
+    //ClearScreen(0xffffff);
+    ClearScreen(0x171717); // Clear it with a matte black screen (Because it looks nice lol)
+    DrawFilledRectangle(10,10,100,100,0xffffff); // 0x141414
 
 }
