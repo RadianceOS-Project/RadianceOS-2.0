@@ -16,7 +16,7 @@ struct limine_framebuffer_request framebuffer_request = {
 
 void InitialiseFrameBuffer() {
     if(framebuffer_request.response == NULL || framebuffer_request.response->framebuffer_count < 1) {
-        hcf(); // Halt the CPU if something isn't right
+        //hcf(); // Halt the CPU if something isn't right // Or not lol
     }
 
     framebuffer = framebuffer_request.response->framebuffers[0]; // Somehow we could have multiple?
