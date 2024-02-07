@@ -14,5 +14,7 @@ int GetBufferCount(void);
 
 unsigned int FetchPixel(int x, int y);
 
+int IsAll(unsigned int CheckFor);
+
 //unsigned int ScreenbufferWidth = 0;
 //unsigned int ScreenbufferHeight = 0;

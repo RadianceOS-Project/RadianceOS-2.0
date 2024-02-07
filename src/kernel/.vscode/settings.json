@@ -2,6 +2,8 @@
     "files.associations": {
         "*.ejs": "html",
         "list": "cpp",
-        "videoutils.h": "c"
+        "videoutils.h": "c",
+        "videospecs.h": "c",
+        "kernelutils.h": "c"
     }
 }

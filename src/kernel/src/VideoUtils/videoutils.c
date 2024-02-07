@@ -82,6 +82,8 @@ void DrawFilledRectangle(int x, int y, int width, int height, unsigned int color
 }
 
 void DrawRectangle(int x, int y, int width, int height, unsigned int color) {
+    // Clearly my maths isn't right lol
+
     DrawLine(x, y, x + width, y, color); // Top line
     DrawLine(x, y, x, y + height, color); // Left down line
     DrawLine(x, y + height, x + width, y + height, color); // Bottom line
@@ -127,4 +129,20 @@ unsigned int FetchPixel(int x, int y) {
     volatile uint32_t* fb_ptr = framebuffer->address;
 
     return fb_ptr[x + y * framebuffer->width];
+}
+
+int IsAll(unsigned int CheckFor) {
+    // Checks all of the pixels to see if they are all the same colour (The one provided)
+
+    int contains = 1; // 0 = No, 1 = Yes
+
+    for (size_t y = 0; y < framebuffer->height; y++)
+    {
+        for (size_t x = 0; x < framebuffer->width; x++)
+        {
+            if(FetchPixel(x, y) != CheckFor) contains = 0;
+        }
+    }
+
+    return contains;
 }
