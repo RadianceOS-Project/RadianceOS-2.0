@@ -27,6 +27,8 @@ void InitialiseFrameBuffer() {
     //ScreenbufferHeight = framebuffer->height;
 }
 
+int GetBufferCount(void) { return framebuffer_request.response->framebuffer_count; }
+
 int GetWidth(void) { return framebuffer->width; }
 int GetHeight(void) { return framebuffer->height; }
 
@@ -79,6 +81,13 @@ void DrawFilledRectangle(int x, int y, int width, int height, unsigned int color
    }
 }
 
+void DrawRectangle(int x, int y, int width, int height, unsigned int color) {
+    DrawLine(x, y, x + width, y, color); // Top line
+    DrawLine(x, y, x, y + height, color); // Left down line
+    DrawLine(x, y + height, x + width, y + height, color); // Bottom line
+    DrawLine(x + width, y + height, x + width, y, color); // Right up line
+}
+
 void DrawPoint(int x, int y, unsigned int color)
 {
 
@@ -87,7 +96,7 @@ void DrawPoint(int x, int y, unsigned int color)
 
 }
 
-void drawLine(int x1, int y1, int x2, int y2, unsigned int color) 
+void DrawLine(int x1, int y1, int x2, int y2, unsigned int color) 
 {
     int dx, dy, p, x, y;
 
@@ -112,4 +121,10 @@ void drawLine(int x1, int y1, int x2, int y2, unsigned int color)
             p = p + 2 * dy - 2 * dx;
         }
     }
+}
+
+unsigned int FetchPixel(int x, int y) {
+    volatile uint32_t* fb_ptr = framebuffer->address;
+
+    return fb_ptr[x + y * framebuffer->width];
 }

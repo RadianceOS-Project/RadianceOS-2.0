@@ -138,6 +138,8 @@ void _loop(void)
     DrawFilledRectangle(25 + ((100 + 25) * 6), 25 + 100 + 25, 100, 100, colorG1);
     DrawFilledRectangle(25 + ((100 + 25) * 7), 25 + 100 + 25, 100, 100, colorH1);
 
+    DrawRectangle(10, 10, GetWidth() - 20, GetHeight() - 20, 0xfff);
+
     //DrawFilledRectangle(25, 25, GetWidth() - 50, GetHeight() - 50, colorB); // 0xffffff
 
     // Now display boxes going up depending on the frames
