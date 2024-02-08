@@ -1,10 +1,9 @@
-#include <limine/limine.h>
-#include <KernelUtils/KernelUtils.h>
-#include <VideoUtils/videoutils.h>
-#include <VideoUtils/colors.h>
-#include <VideoUtils/videospecs.h>
-
-#include <Graphics/ConsoleMode/ConsoleMode.h>
+#include <stdint.h>
+#include <stddef.h>
+#include <stdbool.h>
+#include <limine.h>
+#include <flanterm/flanterm.h>
+#include <flanterm/backends/fb.h>
 
 // Set the base revision to 1, this is recommended as this is the latest
 // base revision described by the Limine boot protocol specification.
@@ -16,157 +15,117 @@ LIMINE_BASE_REVISION(1)
 // the compiler does not optimise them away, so, in C, they should
 // NOT be made "static".
 
-/*struct limine_framebuffer_request framebuffer_request = {
+struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST,
     .revision = 0
-};*/
+};
 
-bool Running = true;
-//struct limine_framebuffer* framebuffer;
+// GCC and Clang reserve the right to generate calls to the following
+// 4 functions even if they are not directly called.
+// Implement them as the C specification mandates.
+// DO NOT remove or rename these functions, or stuff will eventually break!
+// They CAN be moved to a different .c file.
+
+void *memcpy(void *dest, const void *src, size_t n) {
+    uint8_t *pdest = (uint8_t *)dest;
+    const uint8_t *psrc = (const uint8_t *)src;
+
+    for (size_t i = 0; i < n; i++) {
+        pdest[i] = psrc[i];
+    }
+
+    return dest;
+}
+
+void *memset(void *s, int c, size_t n) {
+    uint8_t *p = (uint8_t *)s;
+
+    for (size_t i = 0; i < n; i++) {
+        p[i] = (uint8_t)c;
+    }
+
+    return s;
+}
+
+void *memmove(void *dest, const void *src, size_t n) {
+    uint8_t *pdest = (uint8_t *)dest;
+    const uint8_t *psrc = (const uint8_t *)src;
+
+    if (src > dest) {
+        for (size_t i = 0; i < n; i++) {
+            pdest[i] = psrc[i];
+        }
+    } else if (src < dest) {
+        for (size_t i = n; i > 0; i--) {
+            pdest[i-1] = psrc[i-1];
+        }
+    }
+
+    return dest;
+}
+
+int memcmp(const void *s1, const void *s2, size_t n) {
+    const uint8_t *p1 = (const uint8_t *)s1;
+    const uint8_t *p2 = (const uint8_t *)s2;
+
+    for (size_t i = 0; i < n; i++) {
+        if (p1[i] != p2[i]) {
+            return p1[i] < p2[i] ? -1 : 1;
+        }
+    }
+
+    return 0;
+}
+
+// Halt and catch fire function.
+static void hcf(void) {
+    asm ("cli");
+    for (;;) {
+        asm ("hlt");
+    }
+}
+
 // The following will be our kernel's entry point.
 // If renaming _start() to something else, make sure to change the
 // linker script accordingly.
-
-// Temp
-static void _hcf(void) {
-    asm("cli");
-    for (;;) {
-        asm("hlt");
-    }
-}
-
-void _loop(void); // Forward declaration
-
 void _start(void) {
     // Ensure the bootloader actually understands our base revision (see spec).
     if (LIMINE_BASE_REVISION_SUPPORTED == false) {
-        _hcf();
+        hcf();
     }
-
-    //prints the test hello message
-    //printf("Hello from radiace 2.0"); // ISO C++ doesn't support it lmao
 
     // Ensure we got a framebuffer.
-    /*if (framebuffer_request.response == NULL
+    if (framebuffer_request.response == NULL
      || framebuffer_request.response->framebuffer_count < 1) {
-        _hcf();
-    }*/
-    
-    // Fetch the first framebuffer.
-    //struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
-    //Setframebuffer(framebuffer);
-    InitialiseFrameBuffer();
-    //framebuffer = framebuffer_request.response->framebuffers[0];
-    //Setframebuffer(framebuffer); // Temp
-
-    ClearScreen(0x0);
-
-    while (Running)
-    {
-        // Causes it to become very slow
-        /*if(IsAll(0x0)) {
-            ClearScreen(0xfff);
-        }*/
-
-        //_loopRenderTest();
-        _ConsoleMode_loop();
+        hcf();
     }
+
+    // Fetch the first framebuffer.
+    struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
+
+    struct flanterm_context *ft_ctx = flanterm_fb_simple_init(
+        framebuffer->address, framebuffer->width, framebuffer->height, framebuffer->pitch
+    );
+
+    const char msg[] = "Hello, world!\nThis is a test of the flanterm terminal emulator.";
+
+    flanterm_write(ft_ctx, msg, sizeof(msg));
+
+    // Note: we assume the framebuffer model is RGB with 32-bit pixels.
+    /*for (size_t i = 0; i < 100; i++) {
+        volatile uint32_t *fb_ptr = framebuffer->address;
+        fb_ptr[i * (framebuffer->pitch / 4) + i] = 0xffffff;
+    }/*
+
+    // Cool gradient demo showing off how manipulating the framebuffer works
+    /*volatile uint32_t *fb_ptr = framebuffer->address;
+    for (size_t y = 0; y < 768; y++) {
+        for (size_t x = 0; x < framebuffer->pitch / 4; x++)
+        {
+            fb_ptr[y * (framebuffer->pitch / 4) + x] = y;
+        }
+    }*/
 
     // We're done, just hang...
-    _hcf();
-}
-
-unsigned int colorA = 0x0; // 1
-unsigned int colorB = 0x0; // 2
-unsigned int colorC = 0x0; // 3
-unsigned int colorD = 0x0; // 4
-unsigned int colorE = 0x0; // 5
-unsigned int colorF = 0x0; // 6
-unsigned int colorG = 0x0; // 7
-unsigned int colorH = 0x0; // 8
-
-unsigned int colorA1 = 0x0; // 1
-unsigned int colorB1 = 0x0; // 2
-unsigned int colorC1 = 0x0; // 3
-unsigned int colorD1 = 0x0; // 4
-unsigned int colorE1 = 0x0; // 5
-unsigned int colorF1 = 0x0; // 6
-unsigned int colorG1 = 0x0; // 7
-unsigned int colorH1 = 0x0; // 8
-
-unsigned int frame = 0;
-
-unsigned int bgc = 0x0;
-
-void _loopRenderTest(void)
-{
-    frame++;
-
-    if(frame % 4 == 0) {
-        colorA += 0x001F;
-        colorB += 0x002F;
-        colorC += 0x003F;
-        colorD += 0x004F;
-        colorE += 0x005F;
-        colorF += 0x006F;
-        colorG += 0x007F;
-        colorH += 0x008F;
-
-        colorA1 += 0x01F;
-        colorB1 += 0x02F;
-        colorC1 += 0x03F;
-        colorD1 += 0x04F;
-        colorE1 += 0x05F;
-        colorF1 += 0x06F;
-        colorG1 += 0x07F;
-        colorH1 += 0x08F;
-    }
-
-    //ClearScreen(0xffffff);
-    //ClearScreen(0x171717); // Clear it with a matte black screen (Because it looks nice lol)
-    //DrawFilledRectangle(10,10,100,100,0xffffff); // 0x141414
-
-    DrawFilledRectangle(25, 25, 100, 100, colorA);
-    DrawFilledRectangle(25 + 100 + 25, 25, 100, 100, colorB);
-    DrawFilledRectangle(25 + ((100 + 25) * 2), 25, 100, 100, colorC);
-    DrawFilledRectangle(25 + ((100 + 25) * 3), 25, 100, 100, colorD);
-    DrawFilledRectangle(25 + ((100 + 25) * 4), 25, 100, 100, colorE);
-    DrawFilledRectangle(25 + ((100 + 25) * 5), 25, 100, 100, colorF);
-    DrawFilledRectangle(25 + ((100 + 25) * 6), 25, 100, 100, colorG);
-    DrawFilledRectangle(25 + ((100 + 25) * 7), 25, 100, 100, colorH);
-
-    // 2nd line I guess
-
-    DrawFilledRectangle(25, 25 + 100 + 25, 100, 100, colorA1);
-    DrawFilledRectangle(25 + 100 + 25, 25 + 100 + 25, 100, 100, colorB1);
-    DrawFilledRectangle(25 + ((100 + 25) * 2), 25 + 100 + 25, 100, 100, colorC1);
-    DrawFilledRectangle(25 + ((100 + 25) * 3), 25 + 100 + 25, 100, 100, colorD1);
-    DrawFilledRectangle(25 + ((100 + 25) * 4), 25 + 100 + 25, 100, 100, colorE1);
-    DrawFilledRectangle(25 + ((100 + 25) * 5), 25 + 100 + 25, 100, 100, colorF1);
-    DrawFilledRectangle(25 + ((100 + 25) * 6), 25 + 100 + 25, 100, 100, colorG1);
-    DrawFilledRectangle(25 + ((100 + 25) * 7), 25 + 100 + 25, 100, 100, colorH1);
-
-    DrawRectangle(10, 10, GetWidth() - 20, GetHeight() - 20, 0xfff);
-
-    //DrawFilledRectangle(25, 25, GetWidth() - 50, GetHeight() - 50, colorB); // 0xffffff
-
-    // Now display boxes going up depending on the frames
-    
-    unsigned int f = frame / 100; // Makes it easier to draw
-    unsigned int dh = 0; // Display height
-
-    for (size_t i = 0; i < f; i++)
-    {
-        if(i % GetWidth() == 0) dh++;
-
-        DrawFilledRectangle(i, 25 + 100 + 25 + 100 + 25 + dh, 1, 1, 0xffffff);
-    }
-
-    if(frame % 5000 == 0)
-    {
-        if(bgc == 0x0) bgc = 0x3f3f3f;
-        else if(bgc == 0x3f3f3f) bgc = 0x0;
-
-        ClearScreen(bgc);
-    }
+    hcf();
 }
