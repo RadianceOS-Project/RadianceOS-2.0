@@ -61,7 +61,8 @@ override CFLAGS += \
     -mno-mmx \
     -mno-sse \
     -mno-sse2 \
-    -mno-red-zone
+    -mno-red-zone \
+    -I include
 
 # Internal C preprocessor flags that should not be changed by the user.
 override CPPFLAGS := \
@@ -99,7 +100,7 @@ override HEADER_DEPS := $(addprefix obj/,$(CFILES:.c=.c.d) $(CPPFILES:.cpp=.cpp.
 .PHONY: all
 all: bin/$(KERNEL)
 
-src/limine.h:
+include/limine.h:
 	curl -Lo $@ https://github.com/limine-bootloader/limine/raw/trunk/limine.h
 
 # Link rules for the final kernel executable.
@@ -111,12 +112,12 @@ bin/$(KERNEL): GNUmakefile linker.ld $(OBJ)
 -include $(HEADER_DEPS)
 
 # Compilation rules for *.c files.
-obj/%.c.o: src/%.c GNUmakefile src/limine.h
+obj/%.c.o: src/%.c GNUmakefile include/limine.h
 	mkdir -p "$$(dirname $@)"
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # Compilation rules for *.CPP files
-obj/%.cpp.o: src/%.cpp GNUmakefile src/limine.h
+obj/%.cpp.o: src/%.cpp GNUmakefile include/limine.h
 	mkdir -p "$$(dirname $@)"
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
@@ -137,4 +138,4 @@ clean:
 
 .PHONY: distclean
 distclean: clean
-	rm -f src/limine.h
+	rm -f include/limine.h
