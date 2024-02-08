@@ -1,0 +1,1 @@
+void _ConsoleMode_loop(void);

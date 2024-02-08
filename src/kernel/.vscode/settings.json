@@ -4,6 +4,8 @@
         "list": "cpp",
         "videoutils.h": "c",
         "videospecs.h": "c",
-        "kernelutils.h": "c"
+        "kernelutils.h": "c",
+        "consolemode.h": "c",
+        "limine.h": "c"
     }
 }

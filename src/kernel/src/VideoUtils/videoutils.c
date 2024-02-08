@@ -40,7 +40,9 @@ void ClearScreen(unsigned int color)
         fb_ptr[i * (framebuffer->pitch / 4) + i] = color;
     }*/
 
-    for (uint64_t y = 0; y < framebuffer->height; y++) {
+    memset(framebuffer->address, color, framebuffer->height * framebuffer->width * 4); // @xrc2alt
+
+    /*for (uint64_t y = 0; y < framebuffer->height; y++) {
         // Working from top to bottom
         
         for(uint64_t x = 0; x < framebuffer->width; x++) {
@@ -48,7 +50,7 @@ void ClearScreen(unsigned int color)
 
             DrawPoint(x, y, color);
         }
-    }
+    }*/
 }
 
 void DrawFilledRectangle(int x, int y, int width, int height, unsigned int color)
@@ -145,4 +147,24 @@ int IsAll(unsigned int CheckFor) {
     }
 
     return contains;
+}
+
+volatile uint32_t* FetchFrameBufferAddress(void) {
+    volatile uint32_t* fb_ptr = framebuffer->address;
+
+    return fb_ptr;
+}
+
+int OutOfBounds(int x, int y) {
+    // Sees if the provided coordinates are in the bounds
+    // (So we don't write to a part of memory we're not suppost to)
+
+    int InBounds = 1; // 0 = No, 1 = Yes
+
+    if(x > framebuffer->width || 0 > x
+    || y > framebuffer->height || 0 > y) {
+        InBounds = 0;
+    }
+
+    return InBounds;
 }

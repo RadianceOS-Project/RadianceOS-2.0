@@ -16,5 +16,9 @@ unsigned int FetchPixel(int x, int y);
 
 int IsAll(unsigned int CheckFor);
 
+volatile uint32_t* FetchFrameBufferAddress(void);
+
+int OutOfBounds(int x, int y);
+
 //unsigned int ScreenbufferWidth = 0;
 //unsigned int ScreenbufferHeight = 0;

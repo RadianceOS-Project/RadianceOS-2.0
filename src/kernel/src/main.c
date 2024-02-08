@@ -4,6 +4,8 @@
 #include <VideoUtils/colors.h>
 #include <VideoUtils/videospecs.h>
 
+#include <Graphics/ConsoleMode/ConsoleMode.h>
+
 // Set the base revision to 1, this is recommended as this is the latest
 // base revision described by the Limine boot protocol specification.
 // See specification for further info.
@@ -61,7 +63,13 @@ void _start(void) {
 
     while (Running)
     {
-        _loop();
+        // Causes it to become very slow
+        /*if(IsAll(0x0)) {
+            ClearScreen(0xfff);
+        }*/
+
+        //_loopRenderTest();
+        _ConsoleMode_loop();
     }
 
     // We're done, just hang...
@@ -90,7 +98,7 @@ unsigned int frame = 0;
 
 unsigned int bgc = 0x0;
 
-void _loop(void)
+void _loopRenderTest(void)
 {
     frame++;
 
