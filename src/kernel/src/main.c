@@ -2,6 +2,8 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include <limine.h>
+#include <flanterm/flanterm.h>
+#include <flanterm/backends/fb.h>
 
 // Set the base revision to 1, this is recommended as this is the latest
 // base revision described by the Limine boot protocol specification.
@@ -101,11 +103,28 @@ void _start(void) {
     // Fetch the first framebuffer.
     struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
 
+    struct flanterm_context *ft_ctx = flanterm_fb_simple_init(
+        framebuffer->address, framebuffer->width, framebuffer->height, framebuffer->pitch
+    );
+
+    const char msg[] = "Hello, world!\nThis is a test of the flanterm terminal emulator.";
+
+    flanterm_write(ft_ctx, msg, sizeof(msg));
+
     // Note: we assume the framebuffer model is RGB with 32-bit pixels.
-    for (size_t i = 0; i < 100; i++) {
+    /*for (size_t i = 0; i < 100; i++) {
         volatile uint32_t *fb_ptr = framebuffer->address;
         fb_ptr[i * (framebuffer->pitch / 4) + i] = 0xffffff;
-    }
+    }/*
+
+    // Cool gradient demo showing off how manipulating the framebuffer works
+    /*volatile uint32_t *fb_ptr = framebuffer->address;
+    for (size_t y = 0; y < 768; y++) {
+        for (size_t x = 0; x < framebuffer->pitch / 4; x++)
+        {
+            fb_ptr[y * (framebuffer->pitch / 4) + x] = y;
+        }
+    }*/
 
     // We're done, just hang...
     hcf();

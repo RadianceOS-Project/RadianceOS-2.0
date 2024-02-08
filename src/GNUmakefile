@@ -1,7 +1,7 @@
 # Nuke built-in rules and variables.
 override MAKEFLAGS += -rR
 
-override IMAGE_NAME := template
+override IMAGE_NAME := RadianceOS
 
 # Convenience macro to reliably declare user overridable variables.
 define DEFAULT_VAR =
