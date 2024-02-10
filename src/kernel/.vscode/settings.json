@@ -6,6 +6,8 @@
         "videospecs.h": "c",
         "kernelutils.h": "c",
         "consolemode.h": "c",
-        "limine.h": "c"
+        "limine.h": "c",
+        "stdbool.h": "c",
+        "stddef.h": "c"
     }
 }
