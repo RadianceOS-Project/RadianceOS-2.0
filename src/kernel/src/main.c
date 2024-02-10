@@ -31,7 +31,7 @@ static void hcf(void) {
     }
 }
 
-void debug_write(void* ft_ctx, char msg[]) {
+void debug_write(void* ft_ctx, const char msg[]) {
     flanterm_write(ft_ctx, msg, sizeof(msg));
 }
 
@@ -61,11 +61,24 @@ void _start(void) {
 
     flanterm_write(ft_ctx, msg, sizeof(msg));
 
-    ft_ctx->clear(ft_ctx, true);
+    //ft_ctx->clear(ft_ctx, true);
+
+    debug_write(ft_ctx, "RadianceOS 2.0 - Boot Manager\n\n");
 
     debug_write(ft_ctx, "Initialising...\n");
 
     InitialiseSMP();
+
+    for (size_t i = 0; i < 100000; i++)
+    {
+        const char msgf[] = "Line";
+
+        flanterm_write(ft_ctx, msgf, sizeof(msgf));
+    }
+
+    const char msgg[] = "End\n";
+
+    flanterm_write(ft_ctx, msgg, sizeof(msgg));
 
     debug_write(ft_ctx, "Initialised SMP\n");
 
