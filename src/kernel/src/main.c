@@ -7,6 +7,7 @@
 #include <flanterm/backends/fb.h>
 
 #include <hardware/hardwareutils.h>
+#include <io/serial.h>
 
 // Set the base revision to 1, this is recommended as this is the latest
 // base revision described by the Limine boot protocol specification.
@@ -32,7 +33,7 @@ static void hcf(void) {
 }
 
 void debug_write(void* ft_ctx, const char msg[]) {
-    flanterm_write(ft_ctx, msg, sizeof(msg));
+    flanterm_write(ft_ctx, msg, strlen(msg));
 }
 
 // The following will be our kernel's entry point.
@@ -66,6 +67,15 @@ void _start(void) {
     debug_write(ft_ctx, "RadianceOS 2.0 - Boot Manager\n\n");
 
     debug_write(ft_ctx, "Initialising...\n");
+
+    if (SerialInit(COM1, BAUDDIV_38400) == OKAY)
+    {
+        SerialWriteString(COM1, "RadianceOS 2.0 on COM1.\r\n");
+    }
+    else
+    {
+        debug_write(ft_ctx, "Warning: Serial port COM1 could not be initialised.\n");
+    }
 
     InitialiseSMP();
 
