@@ -3,6 +3,7 @@
 #include <stddef.h>
 
 #include <hardware/hardwareutils.h>
+#include <io/serial.h>
 
 #define LIMINE_SMP_X2APIC (1 << 0)
 
@@ -28,6 +29,15 @@ bool IsSMPInit(void) {
 
     return true;
 }
+
+bool COM1Init(void) { return SerialInit(COM1, BAUDDIV_38400) == OKAY; }
+bool COM2Init(void) { return SerialInit(COM2, BAUDDIV_38400) == OKAY; }
+bool COM3Init(void) { return SerialInit(COM3, BAUDDIV_38400) == OKAY; }
+bool COM4Init(void) { return SerialInit(COM4, BAUDDIV_38400) == OKAY; }
+bool COM5Init(void) { return SerialInit(COM5, BAUDDIV_38400) == OKAY; }
+bool COM6Init(void) { return SerialInit(COM6, BAUDDIV_38400) == OKAY; }
+bool COM7Init(void) { return SerialInit(COM7, BAUDDIV_38400) == OKAY; }
+bool COM8Init(void) { return SerialInit(COM8, BAUDDIV_38400) == OKAY; }
 
 inline void PortWriteByte(const uint16_t port, const uint8_t val)
 {

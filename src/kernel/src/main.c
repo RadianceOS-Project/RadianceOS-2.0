@@ -32,8 +32,19 @@ static void hcf(void) {
     }
 }
 
+bool debug = false;
+bool debug__COM1 = true;
+
 void debug_write(void* ft_ctx, const char msg[]) {
-    flanterm_write(ft_ctx, msg, strlen(msg));
+    if(debug) {
+        flanterm_write(ft_ctx, msg, strlen(msg));
+    }
+
+    if(debug__COM1) {
+        if(COM1Init()) {
+            SerialWriteString(COM1, msg);
+        }
+    }
 }
 
 // The following will be our kernel's entry point.
@@ -62,35 +73,39 @@ void _start(void) {
 
     flanterm_write(ft_ctx, msg, sizeof(msg));
 
-    //ft_ctx->clear(ft_ctx, true);
+    ft_ctx->clear(ft_ctx, true);
 
     debug_write(ft_ctx, "RadianceOS 2.0 - Boot Manager\n\n");
 
-    debug_write(ft_ctx, "Initialising...\n");
+    debug_write(ft_ctx, "[Info] Initialising...\n");
 
     if (SerialInit(COM1, BAUDDIV_38400) == OKAY)
     {
-        SerialWriteString(COM1, "RadianceOS 2.0 on COM1.\r\n");
+        SerialWriteString(COM1, "(COM1) [Info] RadianceOS 2.0 on COM1.\r\n");
+
+        debug_write(ft_ctx, "[Info] COM1 available\n");
     }
     else
     {
-        debug_write(ft_ctx, "Warning: Serial port COM1 could not be initialised.\n");
+        debug_write(ft_ctx, "[Warn] Serial port COM1 could not be initialised.\n");
     }
 
     InitialiseSMP();
 
-    for (size_t i = 0; i < 100000; i++)
-    {
-        const char msgf[] = "Line";
+    debug_write(ft_ctx, "[Good] Initialised SMP\n");
 
-        flanterm_write(ft_ctx, msgf, sizeof(msgf));
-    }
+    debug_write(ft_ctx, "[Info] Checking COM ports\n[Info] Ports available: ");
 
-    const char msgg[] = "End\n";
+    if(COM1Init()) debug_write(ft_ctx, "COM1 ");
+    if(COM2Init()) debug_write(ft_ctx, "COM2 ");
+    if(COM3Init()) debug_write(ft_ctx, "COM3 ");
+    if(COM4Init()) debug_write(ft_ctx, "COM4 ");
+    if(COM5Init()) debug_write(ft_ctx, "COM5 ");
+    if(COM6Init()) debug_write(ft_ctx, "COM6 ");
+    if(COM7Init()) debug_write(ft_ctx, "COM7 ");
+    if(COM8Init()) debug_write(ft_ctx, "COM8 ");
 
-    flanterm_write(ft_ctx, msgg, sizeof(msgg));
-
-    debug_write(ft_ctx, "Initialised SMP\n");
+    debug_write(ft_ctx, "\n");
 
     // We're done, just hang...
     hcf();
